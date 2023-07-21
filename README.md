@@ -36,7 +36,7 @@
 | Column | Type | Option |
 |-|-|-|
 | user(FK) | references | null: false, foreign_key: true |
-| items(FK) | references | null: false, foreign_key: true |
+| item(FK) | references | null: false, foreign_key: true |
 
 ### Association
 - belongs_to :user
@@ -53,7 +53,7 @@
 | address | string | null: false |
 | building_name | string |  |
 | phone_number | string | null: false |
-| purchase_records(FK) | references | null: false, foreign_key: true |
+| purchase_record(FK) | references | null: false, foreign_key: true |
 
 ### Association
 - belongs_to :purchase_record
