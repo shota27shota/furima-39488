@@ -1,5 +1,8 @@
 class PurchaseRecordsController < ApplicationController
   before_action :set_public_key, only: [:index, :create]
+  before_action :sold
+  before_action :authenticate_user!
+  before_action :items_user
 
   def index
     @item = Item.find(params[:item_id])
@@ -32,6 +35,19 @@ class PurchaseRecordsController < ApplicationController
       card: purchase_record_params[:token],    # カードトークン
       currency: 'jpy'                 # 通貨の種類（日本円）
     )
+  end
+
+  def sold
+    @item = Item.find(params[:item_id])
+    if @item.purchase_record.present?
+      redirect_to user_session_path
+    end
+  end
+
+  def items_user
+    if current_user.id == @item.user.id 
+      redirect_to user_session_path
+    end
   end
 
   def set_public_key
