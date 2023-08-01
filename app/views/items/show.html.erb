@@ -8,10 +8,12 @@
     </h2>
     <div class='item-img-content'>
       <%= image_tag @item.image ,class:"item-box-img" %>
+      <% if @item.purchase_record.present? %>
       <%# 購入済みの場合、条件分岐 %>
         <div class='sold-out'>
           <span>Sold Out!!</span>
         </div>
+      <% end %>
       <%# //購入済みの場合、条件分岐 %>
     </div>
     <div class="item-price-box">
@@ -24,11 +26,20 @@
     </div>
     <%# ログインしている、かつ、購入済みの場合、条件分岐 %>
       <%# ログインユーザーと出品者が同一の場合、条件分岐 %>
-        <%= link_to '商品の編集', edit_item_path(@item), method: :get, class: "item-red-btn" %>
-        <p class='or-text'>or</p>
-        <%= link_to '削除', item_path(@item), method: :delete, data: {turbo_method: :delete}, class:'item-destroy' %>
+    <% if user_signed_in? %>
+      <% if current_user == @item.user %>
+        <% unless @item.purchase_record.present? %>
+         <%= link_to '商品の編集', edit_item_path(@item), method: :get, class: "item-red-btn" %>
+         <p class='or-text'>or</p>
+         <%= link_to '削除', item_path(@item), method: :delete, data: {turbo_method: :delete}, class:'item-destroy' %>
+        <% end %>
       <%# そうでない場合、条件分岐 %>
-        <%= link_to '購入画面に進む', "#", class:"item-red-btn"%>
+      <% else %>
+       <% unless @item.purchase_record.present? %>
+       <%= link_to '購入画面に進む', item_purchase_records_path(@item), class:"item-red-btn"%>
+       <% end %>
+      <% end %>
+    <% end %>
       <%# //ログインユーザーと出品者が同一の場合、条件分岐 %>
     <%# //ログインしている、かつ、購入済みの場合、条件分岐 %>
     <div class="item-explain-box">
